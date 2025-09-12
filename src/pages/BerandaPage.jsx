@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
@@ -10,18 +10,12 @@ import Image5 from "../assets/image5.jpg";
 import Image6 from "../assets/image6.jpg";
 import Image7 from "../assets/image7.jpg";
 import Image8 from "../assets/image8.jpg";
-import Image9 from "../assets/image9.jpg";
-import Image10 from "../assets/image10.jpg";
-import Image11 from "../assets/image11.jpg";
 import Avatar1 from "../assets/1.png";
 import Avatar2 from "../assets/2.png";
 import Avatar3 from "../assets/3.png";
 import Avatar4 from "../assets/4.png";
 import Avatar5 from "../assets/5.png";
 import Avatar6 from "../assets/6.png";
-import Avatar7 from "../assets/7.png";
-import Avatar8 from "../assets/8.png";
-import Avatar9 from "../assets/9.png";
 
 const cards = [
   { img: Image3, avatar: Avatar1 },
@@ -30,9 +24,6 @@ const cards = [
   { img: Image6, avatar: Avatar4 },
   { img: Image7, avatar: Avatar5 },
   { img: Image8, avatar: Avatar6 },
-  { img: Image9, avatar: Avatar7 },
-  { img: Image10, avatar: Avatar8 },
-  { img: Image11, avatar: Avatar9 },
 ];
 
 const cardProps = {
@@ -44,7 +35,20 @@ const cardProps = {
   price: "Rp 300K",
 };
 
+const defaultDesc = "Kursus online dengan materi menarik dan harga terjangkau.";
+const defaultName = "Instruktur Vidiobelajar";
+const defaultRole = "Instruktur Profesional";
+const defaultRating = "4.5 (100)";
+const defaultAvatar = Avatar1;
+
 const BerandaPage = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("products");
+    setProducts(stored ? JSON.parse(stored) : []);
+  }, []);
+
   return (
     <>
       <Header />
@@ -85,12 +89,29 @@ const BerandaPage = () => {
         </section>
 
         <section className="card-grid">
+          {/* Card dummy lama */}
           {cards.map((card, idx) => (
             <Card
-              key={idx}
+              key={`dummy-${idx}`}
               img={card.img}
               avatar={card.avatar}
               {...cardProps}
+            />
+          ))}
+
+          {products.map((product) => (
+            <Card
+              key={`produk-${product.id}`}
+              img={product.image}
+              title={product.name}
+              desc={defaultDesc}
+              name={defaultName}
+              role={defaultRole}
+              rating={defaultRating}
+              price={`Rp ${new Intl.NumberFormat("id-ID").format(
+                product.price
+              )}`}
+              avatar={defaultAvatar}
             />
           ))}
         </section>
